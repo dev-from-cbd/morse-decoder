@@ -1,5 +1,4 @@
 const MORSE_TABLE = {
-  "**********": " ",
   ".-": "a",
   "-...": "b",
   "-.-.": "c",
@@ -37,27 +36,17 @@ const MORSE_TABLE = {
   "----.": "9",
   "-----": "0",
 };
-
-function morseToText(expr) {
-  let morse = "";
-  let result = "";
-  for (let i = 0; i < expr.length; i++) {
-    if (expr[i] === "0") {
-      if (morse.length === 10) {
-        result += MORSE_TABLE[morse];
-        morse = "";
-      }
-      if (i % 10 === 9) {
-        result += " ";
-      }
-    } else {
-      morse += expr[i];
-    }
-  }
-  result += MORSE_TABLE[morse];
-  return result;
+function decode(expr) {
+  let decodeWordsArr = [];
+  let finaleDecodeArr = [];
+  let groups = expr.match(/.{1,10}/g);
+  groups.forEach((group) => {
+    let morseWord = group.replace(/10/g, ".").replace(/11/g, "-");
+    let letter = MORSE_TABLE[morseWord] || " ";
+    finaleDecodeArr.push(letter);
+  });
+  return finaleDecodeArr.join("");
 }
-
 module.exports = {
-  morseToText,
+  decode,
 };
