@@ -1,10 +1,11 @@
-const MORSE_TABLE = {
-  ".-": "a",
-  "-...": "b",
-  "-.-.": "c",
-  "-..": "d",
+const morseCodeMap = {
+  " ": " ",
+  ".": "a",
+  "-": "b",
+  "..": "c",
+  "...": "d",
   ".": "e",
-  "..-.": "f",
+  "..-": "f",
   "--.": "g",
   "....": "h",
   "..": "i",
@@ -37,23 +38,22 @@ const MORSE_TABLE = {
   "-----": "0",
 };
 
-function decode(expr) {
-  const results = "";
-  const character = "";
+const morseToText = (morseCode) => {
+  const decodedLetters = [];
 
-  for (let i = 0; i < expr.length; i += 10) {
-    character = "";
-
-    if (expr[i] === "*") character = " ";
-    else
-      for (let j = 0; j < 10; j += 2)
-        if (expr[i + j] === 1) character += expr[i + j + 1] === 1 ? "-" : ".";
-
-    results += MORSE_TABLE[character] ?? character;
+  for (let i = 0; i < morseCode.length; i += 10) {
+    decodedLetters.push(morseCode.slice(i, i + 10));
   }
-  return results;
-}
+
+  return decodedLetters.reduce((decodedText, morseWord) => {
+    const morseCode = morseWord
+      .split("")
+      .map((c) => (c === "1" ? "." : "-"))
+      .join("");
+    return (decodedText += morseCodeMap[morseCode]);
+  }, "");
+};
 
 module.exports = {
-  decode,
+  morseToText,
 };
