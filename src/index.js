@@ -37,25 +37,15 @@ const morseCode = {
   "-----": "0",
 };
 
-function decodeMorse(encodedMessage) {
-  const groups = encodedMessage.match(/.{1,10}/g);
-  const decoded = groups.map((group) => {
-    return group.replace(/^0+|10|11/g, (match) => {
-      if (match === "10") {
-        return ".";
-      } else if (match === "11") {
-        return "-";
-      }
-      return "";
-    });
-  });
-  const decodedMessage = decoded
-    .map((code) => {
-      return morseCode[code] || " ";
-    })
-    .join("");
-  return decodedMessage;
-}
+const decodeMorse = (expr) => {
+  const groups = expr.match(/.{1,10}/g);
+  const decoded = groups.map((group) =>
+    group.replace(/^0+|10|11/g, (m) =>
+      m === "10" ? "." : m === "11" ? "-" : ""
+    )
+  );
+  return decoded.map((code) => morseCode[code] || " ").join("");
+};
 
 module.exports = {
   decodeMorse,
