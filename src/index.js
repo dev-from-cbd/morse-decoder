@@ -1,4 +1,4 @@
-const morseCode = {
+const MORSE_TABLE = {
   ".-": "a",
   "-...": "b",
   "-.-.": "c",
@@ -37,16 +37,40 @@ const morseCode = {
   "-----": "0",
 };
 
-const decodeMorse = (expr) => {
-  const groups = expr.match(/.{1,10}/g);
-  const decoded = groups.map((group) =>
-    group.replace(/^0+|10|11/g, (m) =>
-      m === "10" ? "." : m === "11" ? "-" : ""
-    )
-  );
-  return decoded.map((code) => morseCode[code] || " ").join("");
-};
+function decode(expr) {
+  const binaryLetters = lettersBinary(expr);
+  const morseArr = binaryToMorse(binaryLetters);
+  return morseToWord(morseArr);
+}
 
 module.exports = {
-  decodeMorse,
+  decode,
 };
+
+function lettersBinary(expr) {
+  const letterCount = 10;
+  let count = 0;
+  const letters = [];
+  while (count < expr.length) {
+    const letter = expr.substr(count, letterCount);
+    letters.push(letter);
+    count += letterCount;
+  }
+  return letters;
+}
+
+function binaryToMorse(binaryArray) {
+  return binaryArray.map((binary) =>
+    binary.replace(/10/g, ".").replace(/11/g, "-").replace(/00/g, "")
+  );
+}
+
+function morseToWord(morseArray) {
+  return morseArray.reduce((sentence, morse) => {
+    if (morse === "**********") {
+      return sentence + " ";
+    } else {
+      return sentence + MORSE_TABLE[morse];
+    }
+  }, "");
+}
